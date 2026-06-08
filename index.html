@@ -1,1 +1,52 @@
+// Projeto Agrinho 2026 - Agro forte, futuro sustentável
+// Tema: Equilíbrio entre produção e meio ambiente
 
+// Definição dos pinos
+const int pinoSensor = A0;  // Sensor de Umidade do Solo conectado na porta Analógica A0
+const int pinoBomba = 8;    // Relé da Bomba de Água (ou LED) na porta Digital 8
+
+// Definição dos limites de umidade (ajustável conforme o solo)
+const int soloSeco = 700;   // Valor lido quando o solo precisa de água
+const int soloUmido = 400;  // Valor lido quando o solo está bem irrigado
+
+void setup() {
+  // Inicializa a comunicação serial para monitorar os dados
+  Serial.begin(9600);
+  
+  // Configuração dos pinos
+  pinMode(pinoSensor, INPUT);
+  pinMode(pinoBomba, OUTPUT);
+  
+  // Garante que a bomba comece desligada
+  digitalWrite(pinoBomba, LOW);
+  
+  Serial.println("--- Sistema de Irrigação Sustentável Agrinho 2026 Iniciado ---");
+}
+
+void loop() {
+  // Lê o valor do sensor de umidade
+  int leituraUmidade = analogRead(pinoSensor);
+  
+  // Exibe o valor no Monitor Serial
+  Serial.print("Leitura do sensor (Umidade): ");
+  Serial.println(leituraUmidade);
+  
+  // Lógica de equilíbrio: Produção vs. Sustentabilidade
+  if (leituraUmidade >= soloSeco) {
+    // Se o solo estiver seco, ativa a bomba para proteger a plantação (Agro Forte)
+    Serial.println("Status: Solo Seco! Ligando irrigação.");
+    digitalWrite(pinoBomba, HIGH);
+  } 
+  else if (leituraUmidade <= soloUmido) {
+    // Se o solo já tiver água suficiente, desliga para economizar recursos (Futuro Sustentável)
+    Serial.println("Status: Solo Úmido! Desligando irrigação para economizar água.");
+    digitalWrite(pinoBomba, LOW);
+  }
+  else {
+    // Situação de equilíbrio
+    Serial.println("Status: Umidade ideal. Mantendo o equilíbrio.");
+  }
+  
+  // Aguarda 2 segundos antes da próxima leitura
+  delay(2000);
+}
